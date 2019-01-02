@@ -217,7 +217,7 @@ header {
     height: 252px;
 }
 .sprteam {
-    maxwidth: 100px;
+    max-width: 100px;
 }
 
 /*Overlay-----------------------------------------------------*/
