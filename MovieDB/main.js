@@ -4,6 +4,7 @@ var storage = {
 	total_pages: '',
 	current_page: 1,
 	articleListLength: '',
+	limit: 10,
 	movieList: [],
 	movieIdClicked: '',
     movieItem: {}
@@ -27,26 +28,23 @@ window.onload = function () {
     render()
 };
 
+//--------------------------  Infinite scroll  > render() while limit allows
 window.onscroll = function() {
   var d = document.documentElement;
   var offset = d.scrollTop + window.innerHeight;
   var height = d.offsetHeight;
 
-console.log('offset = ' + offset);
- console.log('height = ' + height);		
+ //console.log('offset = ' + offset);
+	//console.log('height = ' + height);		
 	
 		if (offset === height) {		
 							
-					storage.current_page = storage.current_page + 1	
-					 render()	
-					console.log(storage.current_page)
+			storage.current_page++
 					
-						
-											
-							
-					
-			}
-			
+			if (storage.current_page < storage.limit) {	
+				render()	 
+			}		
+		}	
 };
 
 // render results of API response
@@ -57,7 +55,8 @@ function render () {
             return res.json()
         })
         .then(function(res) {
-            storage.articleList = res.results;
+			console.log(res.results) 
+            storage.articleList = storage.articleList.concat(res.results); // add new object to existing array
 			storage.total_pages	= res.total_pages;
 			storage.articleListLength = storage.articleList.length;
 			console.log(storage)
