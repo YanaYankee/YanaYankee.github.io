@@ -1,6 +1,9 @@
 //Storage
 var storage = {
     articleList: [],
+	total_pages: '',
+	current_page: 1,
+	articleListLength: '',
 	movieList: [],
 	movieIdClicked: '',
     movieItem: {}
@@ -11,7 +14,7 @@ var storage = {
 //--------------------------  API request for movie list
 function getAllArticle () {
     return fetch(
-        'https://api.themoviedb.org/3/movie/top_rated?api_key=1078453dc71a614c3a03d74c27fbdcb1&language=en-US&page=1',
+        'https://api.themoviedb.org/3/movie/top_rated?api_key=1078453dc71a614c3a03d74c27fbdcb1&language=en-US&page=' + storage.current_page,
         {
             method: 'GET'
         }
@@ -24,6 +27,28 @@ window.onload = function () {
     render()
 };
 
+window.onscroll = function() {
+  var d = document.documentElement;
+  var offset = d.scrollTop + window.innerHeight;
+  var height = d.offsetHeight;
+
+console.log('offset = ' + offset);
+ console.log('height = ' + height);		
+	
+		if (offset === height) {		
+							
+					storage.current_page = storage.current_page + 1	
+					 render()	
+					console.log(storage.current_page)
+					
+						
+											
+							
+					
+			}
+			
+};
+
 // render results of API response
 
 function render () {
@@ -33,6 +58,9 @@ function render () {
         })
         .then(function(res) {
             storage.articleList = res.results;
+			storage.total_pages	= res.total_pages;
+			storage.articleListLength = storage.articleList.length;
+			console.log(storage)
             ArticalList()
         })
 }
@@ -145,6 +173,7 @@ function ArticalItem (data) {
 
     return itemArticle
 }
+
 
 
 //--------------------------  About movie page
