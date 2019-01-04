@@ -1,5 +1,7 @@
 //Storage
 var storage = {
+	 url: "https://api.themoviedb.org/3/",
+    key: '?api_key=1078453dc71a614c3a03d74c27fbdcb1&language=en-US',
     articleList: [],
 	total_pages: '',
 	current_page: 1,
@@ -7,18 +9,18 @@ var storage = {
 	limit: 10,
 	movieList: [],
 	movieIdClicked: '',
-    movieItem: {}
+    movieItem: {},
+     list : document.getElementById('listM'),
+    movieBackground: document.getElementById('movieBackground'),
 };
 
 //--------------------------  Movies List page (GRID)
 
-//--------------------------  API request for movie list
-function getAllArticle () {
-    return fetch(
-        'https://api.themoviedb.org/3/movie/top_rated?api_key=1078453dc71a614c3a03d74c27fbdcb1&language=en-US&page=' + storage.current_page,
-        {
-            method: 'GET'
-        }
+//--------------------------  API request function
+
+function getData (apiName, num) {
+    return fetch(      storage.url + apiName + storage.key + num,
+        {  method: 'GET'  }
     )
 }
 
@@ -28,7 +30,26 @@ window.onload = function () {
     render()
 };
 
-//--------------------------  Infinite scroll  > render() while limit allows
+
+// render results of API response
+
+function render () {
+    getData('movie/top_rated', '&page=' + storage.current_page)//API request for movie list
+        .then(function(res) {
+            return res.json()
+        })
+        .then(function(res) {
+			console.log(res.results) 
+            storage.articleList = storage.articleList.concat(res.results); // add new object to existing array
+			storage.total_pages	= res.total_pages;
+			storage.articleListLength = storage.articleList.length;
+			console.log(storage)
+            ArticalList()
+        })
+}
+// Create global div with id="articleList" to add all movies in grid here
+function ArticalList () {
+	//--------------------------  Infinite scroll  > render() while limit allows
 window.onscroll = function() {
   var d = document.documentElement;
   var offset = d.scrollTop + window.innerHeight;
@@ -47,25 +68,8 @@ window.onscroll = function() {
 		}	
 };
 
-// render results of API response
-
-function render () {
-    getAllArticle()
-        .then(function(res) {
-            return res.json()
-        })
-        .then(function(res) {
-			console.log(res.results) 
-            storage.articleList = storage.articleList.concat(res.results); // add new object to existing array
-			storage.total_pages	= res.total_pages;
-			storage.articleListLength = storage.articleList.length;
-			console.log(storage)
-            ArticalList()
-        })
-}
-// Create global div with id="articleList" to add all movies in grid here
-function ArticalList () {
-    storage.articleList.forEach(function(item) {
+	var i = (storage.current_page-1)*20+1
+    storage.articleList.slice(i).forEach(function(item) {
         articleList.appendChild(ArticalItem(item))
     })
 }
@@ -110,7 +114,7 @@ function ArticalItem (data) {
 					moreFooterDiv.className = 'card-footer';
 							a.className = 'moreInfo';
 
-
+		storage.movieBackground.style.display = 'none';
 
 		// -------------------define API content for the elements 
 
@@ -169,6 +173,7 @@ function ArticalItem (data) {
 
 						textDiv.appendChild(moreFooterDiv)
 							moreFooterDiv.appendChild(a)
+ storage.list.style.display = 'block';
 
     return itemArticle
 }
@@ -177,20 +182,10 @@ function ArticalItem (data) {
 
 //--------------------------  About movie page
 
-//--------------------------  API request for deffinite movie (fetch movie id from storage.movieIdClicked parameter) 
-function getTopMovie () {
-    return fetch(
-        'https://api.themoviedb.org/3/movie/' + storage.movieIdClicked + '?api_key=1078453dc71a614c3a03d74c27fbdcb1&language=en-US',
-        {
-            method: 'GET'
-        }
-    )
-}
-
 
 function renderMovie () {	
  //----  API request for movie by ID
-		getTopMovie () 
+		getData('movie/'+ storage.movieIdClicked, '') //--API request for deffinite movie (fetch movie id from storage.movieIdClicked parameter) 
 //----  parse response body to JSON object 
         .then(function(res) {
             return res.json()
@@ -210,27 +205,63 @@ function renderMovie () {
 
 //--------------------------  create BACK link for user to go back to movies list
 function MovieItem () {
-	var backLinkDiv = document.createElement('div')	
-	backLinkDiv.className = 'col-12 col-sm-12 col-md-12 col-lg-12';
-	
-	
-	var backLink = document.createElement('a');
-		backLink.addEventListener('click', 
-					(function(){clearList('movie')})
-					);
-		backLink.addEventListener('click', 
-					ArticalList
-					);
-		backLink.innerText = 'Back to Movie List';
-		movie.appendChild(backLinkDiv)
-		backLinkDiv.appendChild(backLink)
+   let backLinkDiv = document.createElement('div');
+    backLinkDiv.className = 'col-12 col-sm-12 col-md-12 col-lg-12 my-3';
+    let backLink = document.createElement('button');
+    backLink.addEventListener('click',
+        (function(){clearList('movie')})
+    );
+    backLink.addEventListener('click',
+        ArticalList                            // надо передавать тело
+    );
 
 
+    backLink.className = 'btn btn-outline-info my-2 my-sm-0';
+    backLink.innerText = 'Back to Movie List';
 
-    var itemMovie = document.createElement('div')
+
+    movie.appendChild(backLinkDiv);
+    backLinkDiv.appendChild(backLink);
+
+
+    // -----------------------создаем переменную DOM-элементы
+    let itemMovie = document.createElement('h4');
+    let back_poster = document.createElement('img');
+    let imgAbout = document.createElement('div');
+    // console.log(imgAbout);
+    let imgAboutSrc = document.createElement('img');
+    let textAbout = document.createElement('div');
+    let pTextAbout = document.createElement('p');
+    // ------------------добавили HTML class для дальнейшей стилизации
+    itemMovie.className = 'card-title';
+    imgAbout.className = 'col-12 col-sm-4 col-md-4 col-lg-5 col-xl-4';
+    textAbout.className = 'col-12 col-sm-8 col-md-8 col-lg-7 col-xl-8 d-flex flex-column ';
+    imgAboutSrc.className = 'imgAboutSrc'
+    // -------------------определяем наполнение этих элементов из API
+
     itemMovie.innerText = storage.movieItem.title;
-    movie.appendChild(itemMovie)
-	
+    imgAboutSrc.src = 'https://image.tmdb.org/t/p/w500' + storage.movieItem.poster_path;
+    pTextAbout.innerText = storage.movieItem.overview;
+ //   back_poster.src = 'https://image.tmdb.org/t/p/w500' + storage.movieItem.backdrop_path;
+    // -------------------------Выводим элементы на страницу
+
+    //imgAbout.appendChild(imgAboutSrc);
+
+    movie.appendChild(imgAbout);
+    imgAbout.appendChild(imgAboutSrc);
+    movie.appendChild(textAbout);
+    textAbout.appendChild(itemMovie);
+    textAbout.appendChild(pTextAbout);
+
+   storage.movieBackground.style.display = 'block';
+    storage.movieBackground.style.background = `url('https://image.tmdb.org/t/p/w500${storage.movieItem.backdrop_path}') no-repeat`;
+    storage.movieBackground.style.backgroundSize = "cover";
+   // movieBackground.style.backgroundColor
+    //--------------------------  Infinite scroll  > render() while limit allows
+    window.onscroll = function() {
+       return null;
+    };
+	storage.list.style.display = 'none';
 }
 //--------------------------  clearList function to use on different events 
 function clearList(elId)
@@ -240,22 +271,15 @@ function clearList(elId)
 
 // ----------------------------------Search movies section ---------------------------------------------------------
 // -------------------------- API request to show search results
-function searchMovie () {
-    return fetch(
-        'https://api.themoviedb.org/3/search/movie?api_key=1078453dc71a614c3a03d74c27fbdcb1&language=en-US&page=1&include_adult=false&query=' + input.value,
-        {
-            method: 'GET'
-        }
-    ).then(function(res) { return res.json()})
-};
-///movie/top_rated API
+
 
 // -------------------------- Sarch Movies 
 let input = document.getElementById('searchMovie');
 
 input.oninput = function() {
     clearSearch('searchList')
-       searchMovie()
+       getData('search/movie', '&page=1&include_adult=false&query=' + input.value)
+       .then(function(res) { return res.json()})
         .then(function(res) {
             //console.log(res)
             storage.movieList = res.results
@@ -337,6 +361,7 @@ function ItemMovieFromList(data) {
     searchList.appendChild(searchListUl)
     searchListUl.appendChild(aSearch)
     aSearch.appendChild(searchListLi)
+
 
 
     return searchList
