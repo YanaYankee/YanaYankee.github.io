@@ -86,7 +86,7 @@ header {
     border-radius: 4px;
     padding: 15px 0 0 10px;
 }
-#movieBackground {
+#movieBg {
     min-height: 700px;
     margin-top:100px;
 }
@@ -103,4 +103,94 @@ header {
 }
 .imgAboutSrc {
     width: 100%;
+}
+ /*+++++++++++++++++++++++++ SVG+++++++++++++++++*/
+.rating {
+    width: 70px;
+    float: left;
+}
+.ratingText {
+    margin: 20px 0px 30px 30px;
+    width:100px;
+    font-weight: 700;
+    font-size: smaller;
+    float: left;
+}
+.score {
+    width:80px;
+    height:80px;
+}
+
+.score-circle {
+    stroke: #17a2b8;
+    transition: stroke-dashoffset 1s ease-out;
+}
+.score-empty {
+    stroke: #081c24;
+    stroke-width: 55px;
+    fill: none;
+}
+#js-circle{
+    /*transform: rotate(-90deg);*/
+    /*transform-origin: 38% 42%;*/
+    stroke-width: 55px;
+    stroke-dasharray: 1100px;
+    stroke-dashoffset: 1100px;
+    fill: none;
+    /*stroke-dashoffset: 33px;*/
+
+}
+.score-text {
+    fill: #f0f8ff!important;
+    font: bold 4rem "Poppins", Helvetica, Arial, sans-serif;
+    font-size: 7em;
+}
+
+/*+++++++++++++++++++++++++ END SVG+++++++++++++++++*/
+
+/*------------карусель карусель карусель ---------------------*/
+.carousel  {
+    /*max-width: 1080px; !*  *!*/
+    margin: 120px auto;
+    width:100%;
+    
+}
+.carousel-wrapper {
+    margin: 10px 30px; 
+    overflow: hidden; 
+    position:relative;
+}
+.carousel-items {
+    width: 10000px; 
+    position: relative; 
+}
+.carousel-block {
+    float: left; 
+    width: 250px;
+    padding: 10px 10px 10px 0px; 
+}
+.carousel-block img{
+    display:block;
+}
+/*********** BUTTONS ***********/
+.carousel-button-left a, .carousel-button-right a{
+    width: 64px;
+    height: 64px;
+    position: relative;
+    top: 80px;
+    cursor: pointer;
+    text-decoration:none;
+}
+.carousel-button-left a{
+    float: left;
+    background: url(img/left-arrow-64.png) no-repeat;
+}
+.carousel-button-right a{
+    float: right;
+    background: url(img/right-arrow-64.png) no-repeat;
+}
+
+/*********** SHADOW ***********/
+.shadow{
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
 }
