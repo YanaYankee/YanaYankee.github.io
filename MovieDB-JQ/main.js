@@ -18,6 +18,8 @@ var s = {
 	movieSimilar: {},
 	list : document.getElementById('listM'),
 	movieBg: document.getElementById('movieBg'),
+	en: {"title":"Search movies by title","info":"More info","rating": "Users' rating","release":"Release date","back":"Back to Movie List "},
+    ru: {"title":"Поиск фильмов по названию", "info":"Подробнее","rating": "Рейтинг пользователя", "release":"Дата релиза", "back":"Обратно к списку фильмов" }
 };
 
 //--------------------------------- GET DATA FUNCTION -----------------------------------
@@ -49,16 +51,18 @@ $(window).on('scroll', function() {
 //--------------------------- Change language on click  -----------------------------------------
 $(document).on("click", ".curLang", (function() {
 		var langText = document.querySelector(".curLang");
-
+		var text = document.querySelector(".headerSearchName");
 		clearSearch("searchList");
 		clearSearchValue("searchMovie");
 		if(s.curLang === "en-US"){
 			s.curLang = "ru-RU" ;
 			langText.innerText =  "RU";
+			text.textContent = `${s.ru.title}`
 		}
 		else {
 			s.curLang = "en-US";
 			langText.innerText =  "EN";
+			text.textContent = `${s.en.title}`
 		}
 				if(s.curAPI === "Grid"){
 					$('#listM').empty();
@@ -76,6 +80,14 @@ $(document).on("click", ".curLang", (function() {
 		getData("movie/"+ s.movieIdClicked + "/similar", "", similarToStorage , error);
 
 		}
+		
+		//--------------------------------- TRANSLATE certain strings -----------------------------------
+	function translation(n){
+		if ( s.currentLang === "en-US") {
+			return s.en[n]
+		}
+		else {return s.ru[n] }
+	}
 //--------------------------- More Info (about movie page) on click   -------------------------------------
 $(document).on("click", ".moreInfo", (function() {
 		s.movieIdClicked = this.id;
@@ -139,7 +151,7 @@ function ArticalList () {
 			+ "<div class='card-body'>"
 			+ "<h4 class='card-title'>" + s.articleList[i]["title"] + "</h4>"
 			+ "<p class='card-text'>" + s.articleList[i]["overview"] + "</p>"
-			+ "<p class='card-footer'><button  class='moreInfo' id='" + s.articleList[i]["id"] + "'>More info</button></p>"
+			+ "<p class='card-footer'><button  class='moreInfo' id='" + s.articleList[i]["id"] + "'>"+translation("info")+"</button></p>"
 			+ "</div>"
 			+ "</div>"
 			+ "</div>"
@@ -200,7 +212,7 @@ function moviePage(){
 			"<div class='container'>"
 			+ "<div class='row' id='movie'>"
                     + "<div class='col-12 col-sm-12 col-md-12 col-lg-12 my-3'>"
-                    + "<button id='backBtn' class='btn btn-outline-info my-2 my-sm-0'>Back to Movie List</button>"
+                    + "<button id='backBtn' class='btn btn-outline-info my-2 my-sm-0'>"+translation("back")+"</button>"
                     + "</div>"
 			+ "<div class='col-12 col-sm-4 col-md-4 col-lg-5 col-xl-4'>"
 			    +"<img class='imgAboutSrc' src='" + imageMovie + "'>"
@@ -212,7 +224,7 @@ function moviePage(){
                 + "<circle class='score-empty'  cx='175' cy='175' r='175'> </circle>"
                 + "<circle id='js-circle' class='js-circle score-circle' transform='rotate(-90 175 175)' cx='175' cy='175' r='175' style='stroke-dashoffset: 33;'></circle>"
                 + "<text id = 'score-rating' class='js-text score-text' x='49%' y='51%' dx='-25' text-anchor='middle'></text></svg></div>"
-                + "<div class='ratingText'>Рейтинг пользователя</div>"
+                + "<div class='ratingText'>"+translation("rating")+"</div>"
 			+"</div>"
                 + "<p class='card-text'>" + s.movieItem["overview"] + "</p>"
                 + "<div id='genres'></div>"
@@ -228,7 +240,8 @@ function moviePage(){
                     "<div class='carousel-wrapper'>"
 			+ "</div></div></div>"
 		);
-			$("#aboutMovie").html(resultHtml);
+		$("#aboutMovie").html(resultHtml);
+       
 
 
 	////----------------------------------------- Circle radius, diameter and offset function	
@@ -249,6 +262,26 @@ function moviePage(){
 			text.textContent = `${val}%`
 		};
 		run();
+		// ------------------------- genres -------------------------------------
+
+        var genres = $("<ul>");
+		
+        for (var i = 0; i < s.movieItem.genres.length; i++) {
+			console.log(s.movieItem.genres.length);
+            genres.append(
+                "<li id='" + s.movieItem.genres[i]["id"] +"' class='genre badge badge-info'>" + s.movieItem.genres[i]["name"] + "</li>"
+            )
+        }
+        genres.append("</ul>");
+        // ------------------------- release date -------------------------------------
+        var releaseHTML = $("<div>");
+        releaseHTML.append(
+            "<div  class='text-light font-size-1.2em'>"+ translation('release')+ ": <span class='font-weight-bold'>" + s.movieItem.release_date + "</span>" +
+            "</div>"
+        );
+		 $("#genres").html(genres);
+        $("#release").html(releaseHTML);
+		
 	}
 
 

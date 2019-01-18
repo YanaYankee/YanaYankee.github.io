@@ -19,6 +19,7 @@ header {
 #listM {
     margin-top: 134px
 }
+
 .headerSearchName {
     color: #f0f8ff;
 }
@@ -147,7 +148,11 @@ header {
 }
 
 /*+++++++++++++++++++++++++ END SVG+++++++++++++++++*/
-
+.genre {
+    margin-right: 15px;
+    font-size: 16px;
+    color: #f0f8ff!important;
+}
 /*------------карусель карусель карусель ---------------------*/
 .carousel  {
     /*max-width: 1080px; !*  *!*/
