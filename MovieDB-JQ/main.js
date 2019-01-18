@@ -37,6 +37,7 @@ $(window).on('load', function (e) {
 	$('#movieBg').hide();
 	s.curAPI="Grid";
 	getArticleList();
+	
 });
 
 //--------------------------- Infinite Scroll  -------------------------------------
@@ -57,17 +58,17 @@ $(document).on("click", ".curLang", (function() {
 		if(s.curLang === "en-US"){
 			s.curLang = "ru-RU" ;
 			langText.innerText =  "RU";
-			text.textContent = `${s.ru.title}`
+			text.textContent = s.ru.title
 		}
 		else {
 			s.curLang = "en-US";
 			langText.innerText =  "EN";
-			text.textContent = `${s.en.title}`
+			text.textContent = s.en.title
 		}
 				if(s.curAPI === "Grid"){
 					$('#listM').empty();
 					s.articleList=[];
-					getData("movie/top_rated", '&page=' + s.current_page, toStorage , error);
+					getData("movie/top_rated", '&page=' + s.current_page, toStorage , error);					
 				}
 				else {
 					movieAboutPage();
@@ -83,7 +84,7 @@ $(document).on("click", ".curLang", (function() {
 		
 		//--------------------------------- TRANSLATE certain strings -----------------------------------
 	function translation(n){
-		if ( s.currentLang === "en-US") {
+		if ( s.curLang === 'en-US') {
 			return s.en[n]
 		}
 		else {return s.ru[n] }
