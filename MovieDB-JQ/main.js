@@ -186,11 +186,11 @@ $(document).on("click", ".label", (function() {
 			
 		for (var i = 0; i < s.articleList.length; i++) {
 			var image = s.articleList[i]["poster_path"]
-			if (image == null){image = "img/no-image.gif"}   else {image = s.imgUrl + s.articleList[i]["poster_path"]}
+			if (image == null){image = "img/no-image.gif"}   else {image = s.imgUrl + s.articleList[i]["poster_path"]}		
 			
 			var cutString =  s.articleList[i].overview.slice(0,200);
 			s.articleList[i].overview  = cutString.slice(0, cutString.lastIndexOf('.'))+'.';
-			resultHtml.append("<div class='result col-6 col-sm-3 col-md-2'>"
+			resultHtml.append("<div class='result col-12 col-sm-12 col-md-3'>"
 				+ "<div class='card movie-card'>"
 					+"<div class='rowMovieDiv row no-gutters'>"
 						+ "<div class='imgDiv'>"
@@ -200,7 +200,8 @@ $(document).on("click", ".label", (function() {
 					+ "<h5 class='card-title'>" + s.articleList[i]["title"] + "</h5>"
 					+ "<p class='card-text'>" + translation("release")+ ": " + s.articleList[i].release_date.slice(0,4) + "</p>"
 				//+ "<p class='card-text'>" + s.articleList[i]["overview"] + "</p>"
-					+ "<p class='card-footer'><button class='moreInfo " + s.mediaTypeClicked + " btn btn-outline-info' id='" + s.articleList[i]["id"] + "'>"+translation("info")+"</button></p>"
+					+ "<p class='card-footer'>"
+					+"<button class='moreInfo " + s.mediaTypeClicked + " btn btn-outline-info' id='" + s.articleList[i]["id"] + "'>"+translation("info")+"</button></p>"
 						+ "</div>"
 					+ "</div>"
 				+ "</div>"
@@ -371,7 +372,7 @@ function aboutPage(iPath, bPath, title, info, rate){
 	//console.log(s.imgUrl)
 	console.log(bImage)
 	if ( $(window).width() < 600) {      
-		  icon = bImage;
+		  thumb = bImage;
 		  bImage = '';
 		} 
 	
