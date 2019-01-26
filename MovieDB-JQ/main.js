@@ -51,8 +51,7 @@
 		var m = d.getMonth()+1
 		var day = d.getDate()
 		s.gte = y+'-'+m+'-'+day;
-		s.lte = y+'-'+m+'-'+ (day+7);
-		console.log(s.lte)
+		//s.lte = y+'-'+m+'-'+ (day+7); causes 502, wrong date count
 
 		$('#movieBg').hide();
 		
@@ -89,7 +88,7 @@ $(document).on("click", ".curLang", (function() {
 				if(s.curAPI === "Grid"){
 					$('#listM').empty();
 					s.articleList=[];
-					getData("discover/movie", 'primary_release_date.gte='+s.gte+'&primary_release_date.lte='+s.lte+'&sort_by=popularity.desc&page=' + s.current_page, toStorage , error); //API request for movie list
+					getData("discover/movie", 'primary_release_date.gte='+s.gte+'&primary_release_date.lte='+'&sort_by=popularity.desc&page=' + s.current_page, toStorage , error); //API request for movie list
 				}
 				else if(s.curAPI === "Discover"){
 					$('#listM').empty();
@@ -431,7 +430,7 @@ function aboutPage(iPath, bPath, title, info, rate){
 		)
 		$(".icon").html(resultHtml);
 			var val = 0
-			let circle = document.getElementById("js-circle");
+			var circle = document.getElementById("js-circle");
 			var text 	= document.getElementById("score-rating");
 			var radius = circle.getAttribute("r");
 			var diameter = Math.round(Math.PI * radius * 2);
